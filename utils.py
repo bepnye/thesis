@@ -2,7 +2,7 @@ import os, operator, re
 import cPickle as pkl
 import numpy as np
 from nltk.tokenize import word_tokenize
-from collections import Counter
+from collections import Counter, defaultdict
 from random import randint, shuffle
 from scipy import sparse
 from sklearn import linear_model
@@ -32,15 +32,16 @@ DEC = -1.0
 
 UNK = "<UNK>"
 
-tags = ["Top/News/World", "Top/News/Sports", "Top/News/Business", "Top/Features/Arts", "Top/News/U.S."]
+SHORT_TAGS = ["US", "sports", "world", "business"]
+TAGS = ["Top/News/World", "Top/News/Sports", "Top/News/Business", "Top/News/U.S."]
 tag_shorts = { "Top/News/World" : "world",
                "Top/News/Sports" : "sports",
                "Top/News/Business" : "business",
                "Top/Features/Arts" : "arts",
                "Top/News/U.S." : "US" }
 
-def dict_inc(d, e):
-  d[e] = d.get(e, 0) + 1
+def dict_inc(d, e, n = 1):
+  d[e] = d.get(e, 0) + n
 
 def get_sub_directories(top):
 	subs = [os.path.join(top, sub) for sub in os.listdir(top)]
